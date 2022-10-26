@@ -1,27 +1,46 @@
+import axios from "axios";
 import React from "react";
-import styled from "styled-components";
-
-
-const FormStyle = styled.div`
-    width: 90vw;
-    height: 90vh;
-    display: flex;
-    background-color: blueviolet;
-
-`
-
-const FormS= styled.form`
-    width: 60%;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    background-color: yellowgreen;
-
-
-`
+import { useEffect, useState } from "react";
+import { FormStyle, FormS } from "./Styles";
 
 function Form(){
+
+    const [paises, setPaises] = useState([])
+    const [cidades, setCidades] = useState([])
+
+
+    useEffect(() => {
+        axios.get("https://amazon-api.sellead.com/country")
+        .then(response => {
+            setPaises(response.data)
+        })
+
+    }, [])
+    useEffect(() => {
+        axios.get("https://amazon-api.sellead.com/city")
+        .then(response => {
+            setCidades(response.data)
+            console.log(cidades)
+        })
+
+    }, [])
+
+    const [codigo, setCodigo] = useState(null)
+
+    var lista = []
+    const VerificaCodigo = (codigo, cidades) => {
+        {cidades.map(cidade => {
+                if(codigo === cidade.country_code){
+                lista.push(cidade)
+            }
+            })
+            }
+        return lista
+    }
+    VerificaCodigo(codigo, cidades)
+    console.log(lista)
+
+  
 
     return(
         <FormStyle>
@@ -40,19 +59,35 @@ function Form(){
                     </div>
                     <div className="destinos">
                         <p>Destinos de interesse</p>
-                        <select name="país">
-                            <option value="1">País 1</option>
-                            <option value="2">País 2</option>
-                            <option value="3">País 3</option>
-                            <option value="4">País 4</option>
-                            <option value="5">País 5</option>
+                        <select name="paises" onChange={(e) => setCodigo(e.target.value)}>
+                            {paises.map(país => {
+                                return (
+                                <option 
+                                key={país.id} 
+                                value={país.code}
+                                >
+                                    {país.name_ptbr}
+                                </option>
+                                )})
+                            }
                         </select>
                         <select name="cidade">
-                            <option value="1">cidade 1</option>
-                            <option value="2">cidade 2</option>
-                            <option value="3">cidade 3</option>
-                            <option value="4">cidade 4</option>
-                            <option value="5">cidade 5</option>
+
+                           
+                            
+                        {lista.map(list => {
+                            return (
+                                <option 
+                                key={list.id} 
+                                value={list.country_code}>
+                                    {list.name !== null ? 
+                                     <>{list.name}</> 
+                                    :<>{list.name_ptbr}</> }
+                                </option>
+                                )})
+                            }
+                          
+                        
                         </select>
 
                     </div>
