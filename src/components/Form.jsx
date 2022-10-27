@@ -6,7 +6,7 @@ import { FormStyle, FormS } from "./Styles";
 import { Card } from "./Card";
 import { useForm } from "react-hook-form";
 
-function Form(props){
+function Form(){
 
     const {register, handleSubmit} = useForm()
 
@@ -53,9 +53,8 @@ function Form(props){
         return lista
     }
     VerificaCodigo(codigo, cidades)
-    // console.log(lista)
+    console.log(lista)
 
-    let card = {}
   const onSubmit = (e) => {
     if ( !e.nome | !e.email | !e.fone | !e.cpf) {
         setError("Preencha todos os campos");
@@ -64,16 +63,10 @@ function Form(props){
     }else{
         setInfo(true)
         setError("")
-        card = {
-            nome: e.nome,
-            cidade: e.cidades,
-            // pais: e.target.value
-        }
 
-    }
-    
-    console.log(e)
-  }  
+        alert(e.cidade)
+    }  
+  }
 
 
   
@@ -117,7 +110,7 @@ function Form(props){
                                 key={país.id} 
                                 value={país.code}
                                 name={"pais"}
-                                // {...register(this.país.name_ptbr)}
+                                {...register("pais")}
                                 
                                 >
                                 {país.name_ptbr}
@@ -133,7 +126,7 @@ function Form(props){
                                 <option 
                                 key={list.id} 
                                 value={list.name}
-                                {...register("listacidade")}
+                                {...register("cidade")}
                                 >
                                     {list.name !== null ? 
                                      <>{list.name}</> 
@@ -144,9 +137,9 @@ function Form(props){
                         </select>
                     </div>
 
-                {info === true &&
+                {/* {info === true &&
                     <Card >{card.nome}</Card>
-                }
+                } */}
                 </div>
                     <label>{error}</label>
                     <input className="btn" type="submit" placeholder="Enviar" />
