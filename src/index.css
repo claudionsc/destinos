@@ -151,3 +151,8 @@ select {
   justify-content: space-evenly;
 }
 
+.errors{
+  color: rgb(161, 2, 2);
+  font-size: 10px;
+}
+

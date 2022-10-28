@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 function Form(){
 
-    const {register, handleSubmit} = useForm()
+    const {formState: { errors }, register, handleSubmit} = useForm()
 
     const [paises, setPaises] = useState([])
     const [cidades, setCidades] = useState([])
@@ -18,7 +18,7 @@ function Form(){
     // const [cpf, setCpf] = useState("");
     const [error, setError] = useState("");
 
-    const [info, setInfo] = useState(true)
+    const [info, setInfo] = useState(false)
 
     const [getPais, setGetPaís] = useState(null)
     const [getCidades, setGetCidades] = useState(null)
@@ -45,15 +45,15 @@ function Form(){
 
 
   const onSubmit = (e) => {
-    if ( !e.nome | !e.email | !e.fone | !e.cpf | getPais === null | getCidades === null) {
-        setError("Preencha todos os campos");
+    // if ( !e.nome | !e.email | !e.fone | !e.cpf | getPais === null | getCidades === null) {
+    //     setError("Preencha todos os campos");
         
         
-    }else{
+    // }else{
         setInfo(true)
         setGetNome(() => e.nome)
         setError("")
-    }  
+    // }  
     
     console.log(getPais)
     console.log(getCidades)
@@ -72,19 +72,37 @@ function Form(){
                         <p>Dados Pessoais</p>
                         <input className="input" type="text"
                         placeholder="Nome"
-                        {...register("nome")}
+                        {...register("nome", {
+                            required: "Inserir nome",
+                          })}
                         // value={nome}
                         />
+                        {errors.nome && <p className="errors">{errors.nome.message}</p>}
                         <input className="input" type="email"
+                        // name="email"
                         placeholder="Email"
-                        {...register("email")}
+                        {...register("email", {
+                            required: "Inserir email",
+                            pattern: {
+                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                              message: "endereço de email inválido"
+                            }
+                          })}
                         // value={email}
                         />
+                        {errors.email && <p className="errors">{errors.email.message}</p>}
                         <input className="input" type="text" 
                         placeholder="Telefone"
-                        {...register("fone")}
+                        {...register("fone", {
+                            required: "Inserir telefone",
+                            pattern: {
+                              value: /^(?:\+)[0-9]{2}\s?(?:\()[0-9]{2}(?:\))\s?[0-9]{4,5}(?:-)[0-9]{4}$/i,
+                              message: "Telefone inválido"
+                            }
+                          })}
                         // value={fone}
                         />
+                        {errors.fone && <p className="errors">{errors.fone.message}</p>}
                         <input className="input" type="text"
                         placeholder="CPF"
                         {...register("cpf")}
