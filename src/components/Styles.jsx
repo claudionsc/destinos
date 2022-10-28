@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-
+// CONTAINER PAI DI FORMULÁRIO
 export const FormStyle = styled.div`
     width: 90vw;
     height: 90vh;
@@ -8,7 +8,7 @@ export const FormStyle = styled.div`
     position: absolute;
 
 `
-
+// FORMULÁRIO 
 export const FormS = styled.form`
     width: 60%;
     height: 90%;

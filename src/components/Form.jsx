@@ -8,26 +8,26 @@ import InputMask from "react-input-mask";
 
 function Form(){
 
+    // SELECIONANDO HOOK PARA CONTROLE DOS FORMULÁRIOS
+
     const {formState: { errors }, register, handleSubmit} = useForm()
 
+    // HOOKS PARA CONTROLE DE ESTADO DA REQUISIÇÃO À API
     const [paises, setPaises] = useState([])
-    const [cidades, setCidades] = useState([])
+    const [cidades, setCidades] = useState([]);
 
-    // const [nome, setNome] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [fone, setFone] = useState("");
-    // const [cpf, setCpf] = useState("");
+    // HOOK PARA VALIDAR ERRO
     const [error, setError] = useState("");
 
-    const [info, setInfo] = useState(false)
+    // HOOK PARA RENDERIZAÇÃO CONDICIONAL DO CARD
+    const [card, setCard] = useState(false)
 
+    // HOOOKS PARA EXIBIR DADOS NO CARD
     const [getPais, setGetPaís] = useState(null)
     const [getCidades, setGetCidades] = useState(null)
     const [getNome, setGetNome] = useState(null)
 
-    
-
-
+    // MÉTODOS GET PARA API
     useEffect(() => {
         axios.get("https://amazon-api.sellead.com/country")
         .then(response => {
@@ -44,26 +44,20 @@ function Form(){
     }, [])
 
 
-
+    // FUNÇÃO PARA ESCOLHA DO PAÍS/CIDADE, ALTERAR ESTADO DO CARD E ADICIONAR NOME PARA SER EXIBIDO NO CARD
   const onSubmit = (e) => {
-    if ( !e.nome | !e.email | e.fone.length < 13 | !e.cpf | getPais === null | getCidades === null) {
+    if ( getPais === null | getCidades === null) {
         setError("Preencha todos os campos");
         
         
     }else{
-        setInfo(true)
+        setCard(true)
         setGetNome(() => e.nome)
         setError("")
     }  
-    
-    console.log(e.fone.length)
-    console.log(getCidades)
-    console.log(getNome)
   }
 
-
-
-  
+//   FORMULÁRIOS
 
     return(
         <FormStyle>
@@ -76,11 +70,9 @@ function Form(){
                         {...register("nome", {
                             required: "Inserir nome",
                           })}
-                        // value={nome}
                         />
                         {errors.nome && <p className="errors">{errors.nome.message}</p>}
                         <input className="input" type="email"
-                        // name="email"
                         placeholder="Email"
                         {...register("email", {
                             required: "Inserir email",
@@ -89,7 +81,6 @@ function Form(){
                               message: "endereço de email inválido"
                             }
                           })}
-                        // value={email}
                         />
                         {errors.email && <p className="errors">{errors.email.message}</p>}
                         <InputMask className="input" type="tel" 
@@ -102,7 +93,6 @@ function Form(){
                               message: "Telefone inválido"
                             }
                           })}
-                        // value={fone}
                         />
                         {errors.fone && <p className="errors">{errors.fone.message}</p>}
                         <InputMask className="input" type="text"
@@ -158,10 +148,10 @@ function Form(){
                         </select>
                     </div>
 
-                {info === true &&
+                {card === true &&
                     <Card >
                         <h3>Boa escolha, {getNome}! Destinos escolhidos: {getPais} para país ou {getCidades} para cidade.</h3>
-                        <button className="btn" onClick={() => setInfo(false)}>x</button>
+                        <button className="btn2" onClick={() => setCard(false)}>x</button>
                     </Card>
                 }
                 </div>
