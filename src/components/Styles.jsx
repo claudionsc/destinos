@@ -5,7 +5,7 @@ export const FormStyle = styled.div`
     width: 90vw;
     height: 90vh;
     display: flex;
-    background-color: blueviolet;
+    position: absolute;
 
 `
 
@@ -15,7 +15,8 @@ export const FormS = styled.form`
     display: flex;
     flex-direction: column;
     margin: auto;
-    background-color: yellowgreen;
+    background-color: #ffffff;
+    padding: 30px;
 
 
 `

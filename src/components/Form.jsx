@@ -2,7 +2,6 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { FormStyle, FormS } from "./Styles";
-
 import { Card } from "./Card";
 import { useForm } from "react-hook-form";
 
@@ -19,7 +18,11 @@ function Form(){
     // const [cpf, setCpf] = useState("");
     const [error, setError] = useState("");
 
-    const [info, setInfo] = useState(false)
+    const [info, setInfo] = useState(true)
+
+    const [getPais, setGetPaís] = useState(null)
+    const [getCidades, setGetCidades] = useState(null)
+    const [getNome, setGetNome] = useState(null)
 
     
 
@@ -35,38 +38,28 @@ function Form(){
         axios.get("https://amazon-api.sellead.com/city")
         .then(response => {
             setCidades(response.data)
-            // console.log(cidades)
         })
 
     }, [])
 
-    const [codigo, setCodigo] = useState(null)
 
-    var lista = []
-    const VerificaCodigo = (codigo, cidades) => {
-        {cidades.map(cidade => {
-                if(codigo === cidade.country_code){
-                lista.push(cidade)
-            }
-            })
-            }
-        return lista
-    }
-    VerificaCodigo(codigo, cidades)
-    console.log(lista)
 
   const onSubmit = (e) => {
-    if ( !e.nome | !e.email | !e.fone | !e.cpf) {
+    if ( !e.nome | !e.email | !e.fone | !e.cpf | getPais === null | getCidades === null) {
         setError("Preencha todos os campos");
         
         
     }else{
         setInfo(true)
+        setGetNome(() => e.nome)
         setError("")
-
-        alert(e.cidade)
     }  
+    
+    console.log(getPais)
+    console.log(getCidades)
+    console.log(getNome)
   }
+
 
 
   
@@ -102,15 +95,13 @@ function Form(){
                     <div className="destinos">
 
                         <p>Destinos de interesse</p>
-                        <select onChange={(e) => setCodigo(e.target.value)} >
-                        <option title={"name"} key={"select"} value={"select"}>Selecione o país</option>
+                        <select onChange={(e) => setGetPaís(e.target.value)}>
+                        <option title={"name"} key={"select"} value={"select"}></option>
                             {paises.map(país => {
                                 return (
                                 <option
-                                key={país.id} 
-                                value={país.code}
-                                name={"pais"}
-                                {...register("pais")}
+                                key={país.code} 
+                                value={país.name_ptbr}
                                 
                                 >
                                 {país.name_ptbr}
@@ -120,26 +111,27 @@ function Form(){
                         </select>
 
 
-                        <select name="cidade">
-                        {lista.map(list => {
+                        <select name="cidade" onChange={(e) => setGetCidades(e.target.value)}>
+                        <option title={"name"} key={"select"} value={"select"}></option>
+                        {cidades.map(cidade => {
                             return (
                                 <option 
-                                key={list.id} 
-                                value={list.name}
-                                {...register("cidade")}
+                                key={cidade.id} 
+                                value={cidade.name}
                                 >
-                                    {list.name !== null ? 
-                                     <>{list.name}</> 
-                                    :<>{list.name_ptbr}</> }
+                                   {cidade.name_ptbr}
                                 </option>
                                 )})
                         }
                         </select>
                     </div>
 
-                {/* {info === true &&
-                    <Card >{card.nome}</Card>
-                } */}
+                {info === true &&
+                    <Card >
+                        <h3>Parabéns, {getNome}! O destino escolhido foi {getPais} para país ou {getCidades} para cidade.</h3>
+                        <button className="btn" onClick={() => setInfo(false)}>x</button>
+                    </Card>
+                }
                 </div>
                     <label>{error}</label>
                     <input className="btn" type="submit" placeholder="Enviar" />
